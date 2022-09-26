@@ -22,7 +22,8 @@ class StoryScreen extends StatefulWidget {
   State<StoryScreen> createState() => _StoryScreenState();
 }
 
-class _StoryScreenState extends State<StoryScreen> with SingleTickerProviderStateMixin {
+class _StoryScreenState extends State<StoryScreen>
+    with SingleTickerProviderStateMixin {
   late PageController _pageController;
   late AnimationController _animController;
   VideoPlayerController? _videoController;
@@ -45,7 +46,8 @@ class _StoryScreenState extends State<StoryScreen> with SingleTickerProviderStat
     if (userStories.every((element) => element.isSeen == true)) {
       storyToOpen = userStories.last;
     } else {
-      storyToOpen = userStories.firstWhere((element) => element.isSeen == false);
+      storyToOpen =
+          userStories.firstWhere((element) => element.isSeen == false);
     }
     _currentStoryIndex = userStories.indexOf(storyToOpen);
 
@@ -78,7 +80,6 @@ class _StoryScreenState extends State<StoryScreen> with SingleTickerProviderStat
     });
   }
 
-  // TODO: buradaki widgetlari stateless veya neyse o tur widgetlara bol
   @override
   void dispose() {
     _pageController.dispose();
@@ -115,7 +116,8 @@ class _StoryScreenState extends State<StoryScreen> with SingleTickerProviderStat
                     itemBuilder: (context, index) {
                       switch (story.media.type) {
                         case MediaType.image:
-                          return CachedNetworkImage(imageUrl: story.media.url, fit: BoxFit.cover);
+                          return CachedNetworkImage(
+                              imageUrl: story.media.url, fit: BoxFit.cover);
                         case MediaType.video:
                           if (_videoController != null) {
                             return FittedBox(
@@ -154,37 +156,9 @@ class _StoryScreenState extends State<StoryScreen> with SingleTickerProviderStat
                           .toList(),
                     ),
                   ),
-                  Positioned(
-                    top: 80,
-                    left: 12,
-                    child: Row(
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: widget.user.profileImageUrl,
-                          imageBuilder: (context, imageProvider) => Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                            ),
-                          ),
-                          placeholder: (context, url) => const CupertinoActivityIndicator(
-                            radius: 10,
-                          ),
-                          errorWidget: (context, url, error) => const Icon(Icons.error),
-                          fit: BoxFit.fill,
-                        ),
-                        Text(
-                          widget.user.name,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
+                  UserInfo(
+                    profileImageUrl: widget.user.profileImageUrl,
+                    userName: widget.user.name,
                   )
                 ],
               ),
@@ -251,7 +225,8 @@ class _StoryScreenState extends State<StoryScreen> with SingleTickerProviderStat
         ..initialize().then(
           (_) {
             setState(() {});
-            _animController.duration = _videoController?.value.duration ?? Duration.zero;
+            _animController.duration =
+                _videoController?.value.duration ?? Duration.zero;
             _videoController?.play();
             _animController.forward();
           },
@@ -267,6 +242,56 @@ class _StoryScreenState extends State<StoryScreen> with SingleTickerProviderStat
       _currentStoryIndex,
       duration: const Duration(milliseconds: 1),
       curve: Curves.easeInOutCubic,
+    );
+  }
+}
+
+class UserInfo extends StatelessWidget {
+  final String profileImageUrl;
+  final String userName;
+
+  const UserInfo({
+    Key? key,
+    required this.profileImageUrl,
+    required this.userName,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: 80,
+      left: 12,
+      child: Row(
+        children: [
+          CachedNetworkImage(
+            imageUrl: profileImageUrl,
+            imageBuilder: (context, imageProvider) => Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+              ),
+            ),
+            placeholder: (context, url) => const CupertinoActivityIndicator(
+              radius: 10,
+            ),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+            fit: BoxFit.fill,
+          ),
+          const SizedBox(
+            width: 2,
+          ),
+          Text(
+            userName,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

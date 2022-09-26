@@ -2,6 +2,7 @@ import 'package:codeway_insta_case/data.dart';
 import 'package:codeway_insta_case/story_flow_cubit.dart';
 import 'package:codeway_insta_case/story_flow_state.dart';
 import 'package:codeway_insta_case/story_screen.dart';
+import 'package:codeway_insta_case/utils/cubic_transition.dart';
 import 'package:codeway_insta_case/utils/user_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +28,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     for (int i = 0; i < dummyUsers.length; i++) {
       final userId = dummyUsers[i].id;
-      final storiesWithId = stories.where((story) => story.userId == userId).toList();
+      final storiesWithId =
+          stories.where((story) => story.userId == userId).toList();
       dummyUsers[i].addStoryGroup(storiesWithId);
     }
 
@@ -46,7 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Center(
           child: Text(
             'Insta Stories',
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.white),
+            style: TextStyle(
+                fontWeight: FontWeight.w600, fontSize: 16, color: Colors.white),
           ),
         ),
       ),
@@ -73,21 +76,20 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  bool _buildWhen(StoryFlowState previous, StoryFlowState current) => current is ShowView;
+  bool _buildWhen(StoryFlowState previous, StoryFlowState current) =>
+      current is ShowView;
 
   void _listener(BuildContext context, StoryFlowState state) {
     state.maybeMap(
       onPressedNext: (state) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (BuildContext context) {
-              return StoryScreen(
-                user: state.currentUser!,
+          CubicTransitionBuilder(
+              enterPage: StoryScreen(
+                user: state.user!,
                 flowCubit: cubit,
-              );
-            },
-          ),
+              ),
+              exitPage: context.widget),
         );
       },
       onPressedPrevious: (state) {
@@ -96,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
           MaterialPageRoute(
             builder: (BuildContext context) {
               return StoryScreen(
-                user: state.currentUser!,
+                user: state.user!,
                 flowCubit: cubit,
               );
             },

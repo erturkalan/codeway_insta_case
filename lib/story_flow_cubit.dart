@@ -10,7 +10,7 @@ class StoryFlowCubit extends Cubit<StoryFlowState> {
   }) : super(const ShowLoading());
 
   void initialize() async {
-    // api requst
+    // api request
     await Future.delayed(const Duration(seconds: 3));
     emit(ShowView(users: users));
   }
@@ -25,7 +25,7 @@ class StoryFlowCubit extends Cubit<StoryFlowState> {
       onStoryPageQuit(user);
     } else {
       final nextUser = users[userIndex + 1];
-      emit(OnNext(previousUser: user, currentUser: nextUser));
+      emit(OnNext(user: nextUser));
     }
     _updateView(user);
   }
@@ -38,7 +38,7 @@ class StoryFlowCubit extends Cubit<StoryFlowState> {
       onStoryPageQuit(user);
     } else {
       final nextUser = users[userIndex - 1];
-      emit(OnPrevious(previousUser: user, currentUser: nextUser));
+      emit(OnPrevious(user: nextUser));
     }
     _updateView(user);
   }
@@ -49,6 +49,7 @@ class StoryFlowCubit extends Cubit<StoryFlowState> {
     emit(const OnQuit());
   }
 
+  /// updates home page view
   void _updateView(User user) {
     final userIndex = users.indexWhere((element) => element.id == user.id);
     final changedList = List<User>.from(users);

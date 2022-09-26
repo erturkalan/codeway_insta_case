@@ -14,7 +14,7 @@ class StoryFlowState with _$StoryFlowState {
   }) = ShowView;
 
   /// notification states
-  const factory StoryFlowState.onPressedNext({User? previousUser, User? currentUser}) = OnNext;
-  const factory StoryFlowState.onPressedPrevious({User? previousUser, User? currentUser}) = OnPrevious;
+  const factory StoryFlowState.onPressedNext({User? user}) = OnNext;
+  const factory StoryFlowState.onPressedPrevious({User? user}) = OnPrevious;
   const factory StoryFlowState.onQuit() = OnQuit;
 }

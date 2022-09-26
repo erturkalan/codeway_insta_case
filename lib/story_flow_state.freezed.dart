@@ -20,10 +20,8 @@ mixin _$StoryFlowState {
   TResult when<TResult extends Object?>({
     required TResult Function() showLoading,
     required TResult Function(List<User> users) showView,
-    required TResult Function(User? previousUser, User? currentUser)
-        onPressedNext,
-    required TResult Function(User? previousUser, User? currentUser)
-        onPressedPrevious,
+    required TResult Function(User? user) onPressedNext,
+    required TResult Function(User? user) onPressedPrevious,
     required TResult Function() onQuit,
   }) =>
       throw _privateConstructorUsedError;
@@ -31,8 +29,8 @@ mixin _$StoryFlowState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? showLoading,
     TResult Function(List<User> users)? showView,
-    TResult Function(User? previousUser, User? currentUser)? onPressedNext,
-    TResult Function(User? previousUser, User? currentUser)? onPressedPrevious,
+    TResult Function(User? user)? onPressedNext,
+    TResult Function(User? user)? onPressedPrevious,
     TResult Function()? onQuit,
   }) =>
       throw _privateConstructorUsedError;
@@ -40,8 +38,8 @@ mixin _$StoryFlowState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? showLoading,
     TResult Function(List<User> users)? showView,
-    TResult Function(User? previousUser, User? currentUser)? onPressedNext,
-    TResult Function(User? previousUser, User? currentUser)? onPressedPrevious,
+    TResult Function(User? user)? onPressedNext,
+    TResult Function(User? user)? onPressedPrevious,
     TResult Function()? onQuit,
     required TResult orElse(),
   }) =>
@@ -136,10 +134,8 @@ class _$ShowLoading implements ShowLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() showLoading,
     required TResult Function(List<User> users) showView,
-    required TResult Function(User? previousUser, User? currentUser)
-        onPressedNext,
-    required TResult Function(User? previousUser, User? currentUser)
-        onPressedPrevious,
+    required TResult Function(User? user) onPressedNext,
+    required TResult Function(User? user) onPressedPrevious,
     required TResult Function() onQuit,
   }) {
     return showLoading();
@@ -150,8 +146,8 @@ class _$ShowLoading implements ShowLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? showLoading,
     TResult Function(List<User> users)? showView,
-    TResult Function(User? previousUser, User? currentUser)? onPressedNext,
-    TResult Function(User? previousUser, User? currentUser)? onPressedPrevious,
+    TResult Function(User? user)? onPressedNext,
+    TResult Function(User? user)? onPressedPrevious,
     TResult Function()? onQuit,
   }) {
     return showLoading?.call();
@@ -162,8 +158,8 @@ class _$ShowLoading implements ShowLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? showLoading,
     TResult Function(List<User> users)? showView,
-    TResult Function(User? previousUser, User? currentUser)? onPressedNext,
-    TResult Function(User? previousUser, User? currentUser)? onPressedPrevious,
+    TResult Function(User? user)? onPressedNext,
+    TResult Function(User? user)? onPressedPrevious,
     TResult Function()? onQuit,
     required TResult orElse(),
   }) {
@@ -288,10 +284,8 @@ class _$ShowView implements ShowView {
   TResult when<TResult extends Object?>({
     required TResult Function() showLoading,
     required TResult Function(List<User> users) showView,
-    required TResult Function(User? previousUser, User? currentUser)
-        onPressedNext,
-    required TResult Function(User? previousUser, User? currentUser)
-        onPressedPrevious,
+    required TResult Function(User? user) onPressedNext,
+    required TResult Function(User? user) onPressedPrevious,
     required TResult Function() onQuit,
   }) {
     return showView(users);
@@ -302,8 +296,8 @@ class _$ShowView implements ShowView {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? showLoading,
     TResult Function(List<User> users)? showView,
-    TResult Function(User? previousUser, User? currentUser)? onPressedNext,
-    TResult Function(User? previousUser, User? currentUser)? onPressedPrevious,
+    TResult Function(User? user)? onPressedNext,
+    TResult Function(User? user)? onPressedPrevious,
     TResult Function()? onQuit,
   }) {
     return showView?.call(users);
@@ -314,8 +308,8 @@ class _$ShowView implements ShowView {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? showLoading,
     TResult Function(List<User> users)? showView,
-    TResult Function(User? previousUser, User? currentUser)? onPressedNext,
-    TResult Function(User? previousUser, User? currentUser)? onPressedPrevious,
+    TResult Function(User? user)? onPressedNext,
+    TResult Function(User? user)? onPressedPrevious,
     TResult Function()? onQuit,
     required TResult orElse(),
   }) {
@@ -379,7 +373,7 @@ abstract class ShowView implements StoryFlowState {
 abstract class _$$OnNextCopyWith<$Res> {
   factory _$$OnNextCopyWith(_$OnNext value, $Res Function(_$OnNext) then) =
       __$$OnNextCopyWithImpl<$Res>;
-  $Res call({User? previousUser, User? currentUser});
+  $Res call({User? user});
 }
 
 /// @nodoc
@@ -393,17 +387,12 @@ class __$$OnNextCopyWithImpl<$Res> extends _$StoryFlowStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? previousUser = freezed,
-    Object? currentUser = freezed,
+    Object? user = freezed,
   }) {
     return _then(_$OnNext(
-      previousUser: previousUser == freezed
-          ? _value.previousUser
-          : previousUser // ignore: cast_nullable_to_non_nullable
-              as User?,
-      currentUser: currentUser == freezed
-          ? _value.currentUser
-          : currentUser // ignore: cast_nullable_to_non_nullable
+      user: user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
               as User?,
     ));
   }
@@ -412,16 +401,14 @@ class __$$OnNextCopyWithImpl<$Res> extends _$StoryFlowStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$OnNext implements OnNext {
-  const _$OnNext({this.previousUser, this.currentUser});
+  const _$OnNext({this.user});
 
   @override
-  final User? previousUser;
-  @override
-  final User? currentUser;
+  final User? user;
 
   @override
   String toString() {
-    return 'StoryFlowState.onPressedNext(previousUser: $previousUser, currentUser: $currentUser)';
+    return 'StoryFlowState.onPressedNext(user: $user)';
   }
 
   @override
@@ -429,17 +416,12 @@ class _$OnNext implements OnNext {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$OnNext &&
-            const DeepCollectionEquality()
-                .equals(other.previousUser, previousUser) &&
-            const DeepCollectionEquality()
-                .equals(other.currentUser, currentUser));
+            const DeepCollectionEquality().equals(other.user, user));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(previousUser),
-      const DeepCollectionEquality().hash(currentUser));
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(user));
 
   @JsonKey(ignore: true)
   @override
@@ -451,13 +433,11 @@ class _$OnNext implements OnNext {
   TResult when<TResult extends Object?>({
     required TResult Function() showLoading,
     required TResult Function(List<User> users) showView,
-    required TResult Function(User? previousUser, User? currentUser)
-        onPressedNext,
-    required TResult Function(User? previousUser, User? currentUser)
-        onPressedPrevious,
+    required TResult Function(User? user) onPressedNext,
+    required TResult Function(User? user) onPressedPrevious,
     required TResult Function() onQuit,
   }) {
-    return onPressedNext(previousUser, currentUser);
+    return onPressedNext(user);
   }
 
   @override
@@ -465,11 +445,11 @@ class _$OnNext implements OnNext {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? showLoading,
     TResult Function(List<User> users)? showView,
-    TResult Function(User? previousUser, User? currentUser)? onPressedNext,
-    TResult Function(User? previousUser, User? currentUser)? onPressedPrevious,
+    TResult Function(User? user)? onPressedNext,
+    TResult Function(User? user)? onPressedPrevious,
     TResult Function()? onQuit,
   }) {
-    return onPressedNext?.call(previousUser, currentUser);
+    return onPressedNext?.call(user);
   }
 
   @override
@@ -477,13 +457,13 @@ class _$OnNext implements OnNext {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? showLoading,
     TResult Function(List<User> users)? showView,
-    TResult Function(User? previousUser, User? currentUser)? onPressedNext,
-    TResult Function(User? previousUser, User? currentUser)? onPressedPrevious,
+    TResult Function(User? user)? onPressedNext,
+    TResult Function(User? user)? onPressedPrevious,
     TResult Function()? onQuit,
     required TResult orElse(),
   }) {
     if (onPressedNext != null) {
-      return onPressedNext(previousUser, currentUser);
+      return onPressedNext(user);
     }
     return orElse();
   }
@@ -530,11 +510,9 @@ class _$OnNext implements OnNext {
 }
 
 abstract class OnNext implements StoryFlowState {
-  const factory OnNext({final User? previousUser, final User? currentUser}) =
-      _$OnNext;
+  const factory OnNext({final User? user}) = _$OnNext;
 
-  User? get previousUser;
-  User? get currentUser;
+  User? get user;
   @JsonKey(ignore: true)
   _$$OnNextCopyWith<_$OnNext> get copyWith =>
       throw _privateConstructorUsedError;
@@ -545,7 +523,7 @@ abstract class _$$OnPreviousCopyWith<$Res> {
   factory _$$OnPreviousCopyWith(
           _$OnPrevious value, $Res Function(_$OnPrevious) then) =
       __$$OnPreviousCopyWithImpl<$Res>;
-  $Res call({User? previousUser, User? currentUser});
+  $Res call({User? user});
 }
 
 /// @nodoc
@@ -561,17 +539,12 @@ class __$$OnPreviousCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? previousUser = freezed,
-    Object? currentUser = freezed,
+    Object? user = freezed,
   }) {
     return _then(_$OnPrevious(
-      previousUser: previousUser == freezed
-          ? _value.previousUser
-          : previousUser // ignore: cast_nullable_to_non_nullable
-              as User?,
-      currentUser: currentUser == freezed
-          ? _value.currentUser
-          : currentUser // ignore: cast_nullable_to_non_nullable
+      user: user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
               as User?,
     ));
   }
@@ -580,16 +553,14 @@ class __$$OnPreviousCopyWithImpl<$Res>
 /// @nodoc
 
 class _$OnPrevious implements OnPrevious {
-  const _$OnPrevious({this.previousUser, this.currentUser});
+  const _$OnPrevious({this.user});
 
   @override
-  final User? previousUser;
-  @override
-  final User? currentUser;
+  final User? user;
 
   @override
   String toString() {
-    return 'StoryFlowState.onPressedPrevious(previousUser: $previousUser, currentUser: $currentUser)';
+    return 'StoryFlowState.onPressedPrevious(user: $user)';
   }
 
   @override
@@ -597,17 +568,12 @@ class _$OnPrevious implements OnPrevious {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$OnPrevious &&
-            const DeepCollectionEquality()
-                .equals(other.previousUser, previousUser) &&
-            const DeepCollectionEquality()
-                .equals(other.currentUser, currentUser));
+            const DeepCollectionEquality().equals(other.user, user));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(previousUser),
-      const DeepCollectionEquality().hash(currentUser));
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(user));
 
   @JsonKey(ignore: true)
   @override
@@ -619,13 +585,11 @@ class _$OnPrevious implements OnPrevious {
   TResult when<TResult extends Object?>({
     required TResult Function() showLoading,
     required TResult Function(List<User> users) showView,
-    required TResult Function(User? previousUser, User? currentUser)
-        onPressedNext,
-    required TResult Function(User? previousUser, User? currentUser)
-        onPressedPrevious,
+    required TResult Function(User? user) onPressedNext,
+    required TResult Function(User? user) onPressedPrevious,
     required TResult Function() onQuit,
   }) {
-    return onPressedPrevious(previousUser, currentUser);
+    return onPressedPrevious(user);
   }
 
   @override
@@ -633,11 +597,11 @@ class _$OnPrevious implements OnPrevious {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? showLoading,
     TResult Function(List<User> users)? showView,
-    TResult Function(User? previousUser, User? currentUser)? onPressedNext,
-    TResult Function(User? previousUser, User? currentUser)? onPressedPrevious,
+    TResult Function(User? user)? onPressedNext,
+    TResult Function(User? user)? onPressedPrevious,
     TResult Function()? onQuit,
   }) {
-    return onPressedPrevious?.call(previousUser, currentUser);
+    return onPressedPrevious?.call(user);
   }
 
   @override
@@ -645,13 +609,13 @@ class _$OnPrevious implements OnPrevious {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? showLoading,
     TResult Function(List<User> users)? showView,
-    TResult Function(User? previousUser, User? currentUser)? onPressedNext,
-    TResult Function(User? previousUser, User? currentUser)? onPressedPrevious,
+    TResult Function(User? user)? onPressedNext,
+    TResult Function(User? user)? onPressedPrevious,
     TResult Function()? onQuit,
     required TResult orElse(),
   }) {
     if (onPressedPrevious != null) {
-      return onPressedPrevious(previousUser, currentUser);
+      return onPressedPrevious(user);
     }
     return orElse();
   }
@@ -698,11 +662,9 @@ class _$OnPrevious implements OnPrevious {
 }
 
 abstract class OnPrevious implements StoryFlowState {
-  const factory OnPrevious(
-      {final User? previousUser, final User? currentUser}) = _$OnPrevious;
+  const factory OnPrevious({final User? user}) = _$OnPrevious;
 
-  User? get previousUser;
-  User? get currentUser;
+  User? get user;
   @JsonKey(ignore: true)
   _$$OnPreviousCopyWith<_$OnPrevious> get copyWith =>
       throw _privateConstructorUsedError;
@@ -748,10 +710,8 @@ class _$OnQuit implements OnQuit {
   TResult when<TResult extends Object?>({
     required TResult Function() showLoading,
     required TResult Function(List<User> users) showView,
-    required TResult Function(User? previousUser, User? currentUser)
-        onPressedNext,
-    required TResult Function(User? previousUser, User? currentUser)
-        onPressedPrevious,
+    required TResult Function(User? user) onPressedNext,
+    required TResult Function(User? user) onPressedPrevious,
     required TResult Function() onQuit,
   }) {
     return onQuit();
@@ -762,8 +722,8 @@ class _$OnQuit implements OnQuit {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? showLoading,
     TResult Function(List<User> users)? showView,
-    TResult Function(User? previousUser, User? currentUser)? onPressedNext,
-    TResult Function(User? previousUser, User? currentUser)? onPressedPrevious,
+    TResult Function(User? user)? onPressedNext,
+    TResult Function(User? user)? onPressedPrevious,
     TResult Function()? onQuit,
   }) {
     return onQuit?.call();
@@ -774,8 +734,8 @@ class _$OnQuit implements OnQuit {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? showLoading,
     TResult Function(List<User> users)? showView,
-    TResult Function(User? previousUser, User? currentUser)? onPressedNext,
-    TResult Function(User? previousUser, User? currentUser)? onPressedPrevious,
+    TResult Function(User? user)? onPressedNext,
+    TResult Function(User? user)? onPressedPrevious,
     TResult Function()? onQuit,
     required TResult orElse(),
   }) {
