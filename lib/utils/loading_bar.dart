@@ -4,6 +4,7 @@ class LoadingBar extends StatelessWidget {
   final AnimationController animationController;
   final int position;
   final int currentIndex;
+
   const LoadingBar(
       {Key? key,
       required this.animationController,

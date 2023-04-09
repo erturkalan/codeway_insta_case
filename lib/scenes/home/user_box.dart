@@ -1,8 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../models/user_model.dart';
+import '../../models/user_model.dart';
 
 class UserBox extends StatelessWidget {
   final Function onTap;
@@ -15,7 +14,7 @@ class UserBox extends StatelessWidget {
   }) : super(key: key);
 
   bool get userWatchedAllStories {
-    return user.storyGroup.every((element) => element.isSeen == true);
+    return user.storyGroup.every((element) => element.isSeen.value);
   }
 
   @override
@@ -28,7 +27,11 @@ class UserBox extends StatelessWidget {
           height: 60,
           width: 60,
           decoration: BoxDecoration(
-              border: Border.all(width: 2.5, color: userWatchedAllStories ? Colors.grey.withOpacity(0.5) : Colors.orange),
+              border: Border.all(
+                  width: 2.5,
+                  color: userWatchedAllStories
+                      ? Colors.grey.withOpacity(0.5)
+                      : Colors.orange),
               shape: BoxShape.circle,
               gradient: const LinearGradient(
                 begin: Alignment.topRight,

@@ -1,28 +1,32 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:codeway_insta_case/story_flow_cubit.dart';
+import 'package:codeway_insta_case/models/story_model.dart';
+import 'package:codeway_insta_case/models/user_model.dart';
+import 'package:codeway_insta_case/scenes/storyScreen/user_info.dart';
 import 'package:codeway_insta_case/utils/loading_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import 'models/story_model.dart';
-import 'models/user_model.dart';
-
-class StoryScreen extends StatefulWidget {
+class StoryBox extends StatefulWidget {
   final User user;
-  final StoryFlowCubit flowCubit;
+  final Function onStoryClosed;
+  final Function rightToAnotherStory;
+  final Function leftToAnotherStory;
+  final Function(int) storyChanged;
 
-  const StoryScreen({
+  const StoryBox({
     required this.user,
-    required this.flowCubit,
+    required this.onStoryClosed,
+    required this.leftToAnotherStory,
+    required this.rightToAnotherStory,
+    required this.storyChanged,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<StoryScreen> createState() => _StoryScreenState();
+  State<StoryBox> createState() => _StoryBoxState();
 }
 
-class _StoryScreenState extends State<StoryScreen>
+class _StoryBoxState extends State<StoryBox>
     with SingleTickerProviderStateMixin {
   late PageController _pageController;
   late AnimationController _animController;
@@ -42,13 +46,7 @@ class _StoryScreenState extends State<StoryScreen>
       duration: const Duration(seconds: 5),
     );
 
-    final Story storyToOpen;
-    if (userStories.every((element) => element.isSeen == true)) {
-      storyToOpen = userStories.last;
-    } else {
-      storyToOpen =
-          userStories.firstWhere((element) => element.isSeen == false);
-    }
+    final Story storyToOpen = userStories[widget.user.currentStoryIndex.value];
     _currentStoryIndex = userStories.indexOf(storyToOpen);
 
     if (storyToOpen.media.type == MediaType.video) {
@@ -57,7 +55,8 @@ class _StoryScreenState extends State<StoryScreen>
           setState(() {});
         });
     }
-    _loadStory(story: storyToOpen);
+    _loadStory(
+        story: storyToOpen, storyIndex: userStories.indexOf(storyToOpen));
 
     _animController.addStatusListener((status) {
       if (_animController.value == 1) {
@@ -67,13 +66,12 @@ class _StoryScreenState extends State<StoryScreen>
           if (_currentStoryIndex + 1 < userStories.length) {
             _currentStoryIndex += 1;
             _loadStory(
-              story: userStories[_currentStoryIndex],
-            );
+                story: userStories[_currentStoryIndex],
+                storyIndex: _currentStoryIndex);
             _moveStory();
           } else {
             _videoController?.pause();
-
-            widget.flowCubit.onStoryPagePressedNext(widget.user);
+            widget.rightToAnotherStory();
           }
         });
       }
@@ -91,7 +89,6 @@ class _StoryScreenState extends State<StoryScreen>
   @override
   Widget build(BuildContext context) {
     final Story story = userStories[_currentStoryIndex];
-
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -99,7 +96,10 @@ class _StoryScreenState extends State<StoryScreen>
           key: const Key("scrollkey"),
           direction: DismissDirection.down,
           dismissThresholds: const {DismissDirection.down: 0.2},
-          onDismissed: (_) => Navigator.pop(context),
+          onDismissed: (_) {
+            Navigator.pop(context);
+            widget.onStoryClosed();
+          },
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
@@ -184,10 +184,15 @@ class _StoryScreenState extends State<StoryScreen>
     setState(() {
       if (_currentStoryIndex - 1 >= 0) {
         _currentStoryIndex -= 1;
-        _loadStory(story: userStories[_currentStoryIndex]);
+        _loadStory(
+            story: userStories[_currentStoryIndex],
+            storyIndex: _currentStoryIndex);
         _moveStory();
       } else {
-        widget.flowCubit.onStoryPagePressedPrevious(widget.user);
+        _animController.reset();
+        _animController.stop();
+        _videoController?.pause();
+        widget.leftToAnotherStory();
       }
     });
   }
@@ -196,11 +201,15 @@ class _StoryScreenState extends State<StoryScreen>
     setState(() {
       if (_currentStoryIndex + 1 < userStories.length) {
         _currentStoryIndex += 1;
-        _loadStory(story: userStories[_currentStoryIndex]);
+        _loadStory(
+            story: userStories[_currentStoryIndex],
+            storyIndex: _currentStoryIndex);
         _moveStory();
       } else {
+        _animController.reset();
+        _animController.stop();
         _videoController?.pause();
-        widget.flowCubit.onStoryPagePressedNext(widget.user);
+        widget.rightToAnotherStory();
       }
     });
   }
@@ -215,11 +224,12 @@ class _StoryScreenState extends State<StoryScreen>
     _animController.forward();
   }
 
-  void _loadStory({required Story story}) {
+  void _loadStory({required Story story, required int storyIndex}) {
     _animController.reset();
     _animController.stop();
     _videoController?.pause();
-    story.isSeen = true;
+    story.isSeen.value = true;
+    widget.storyChanged(storyIndex);
     if (story.media is VideoMedia) {
       _videoController = VideoPlayerController.network(story.media.url)
         ..initialize().then(
@@ -242,56 +252,6 @@ class _StoryScreenState extends State<StoryScreen>
       _currentStoryIndex,
       duration: const Duration(milliseconds: 1),
       curve: Curves.easeInOutCubic,
-    );
-  }
-}
-
-class UserInfo extends StatelessWidget {
-  final String profileImageUrl;
-  final String userName;
-
-  const UserInfo({
-    Key? key,
-    required this.profileImageUrl,
-    required this.userName,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      top: 80,
-      left: 12,
-      child: Row(
-        children: [
-          CachedNetworkImage(
-            imageUrl: profileImageUrl,
-            imageBuilder: (context, imageProvider) => Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-              ),
-            ),
-            placeholder: (context, url) => const CupertinoActivityIndicator(
-              radius: 10,
-            ),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
-            fit: BoxFit.fill,
-          ),
-          const SizedBox(
-            width: 2,
-          ),
-          Text(
-            userName,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

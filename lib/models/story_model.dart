@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 enum MediaType { image, video }
 
 abstract class Media {
@@ -31,11 +33,10 @@ class ImageMedia extends Media {
 class Story {
   final Media media;
   final int userId;
-  bool isSeen;
+  var isSeen = false.obs;
 
   Story({
     required this.media,
     required this.userId,
-    this.isSeen = false,
   });
 }
