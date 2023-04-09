@@ -1,5 +1,5 @@
-import 'package:codeway_insta_case/scenes/home/tabs/home.dart';
-import 'package:codeway_insta_case/scenes/home/tabs/settings.dart';
+import 'package:codeway_insta_case/scenes/home/tabs/home/home.dart';
+import 'package:codeway_insta_case/scenes/home/tabs/settings/settings.dart';
 import 'package:codeway_insta_case/utils/base_getx_controller.dart';
 import 'package:codeway_insta_case/dummyData/data.dart';
 import 'package:codeway_insta_case/models/user_model.dart';

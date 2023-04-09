@@ -1,4 +1,4 @@
-import 'package:codeway_insta_case/scenes/home/tabs/settings_item.dart';
+import 'package:codeway_insta_case/scenes/home/tabs/settings/settings_item.dart';
 import 'package:codeway_insta_case/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
